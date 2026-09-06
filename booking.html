@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Appointment - Luxe Salon</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%234A1625'/%3E%3Ccircle cx='32' cy='32' r='30' fill='none' stroke='%23AD8A54' stroke-width='3'/%3E%3Cpath d='M32 16 L36 28 L48 32 L36 36 L32 48 L28 36 L16 32 L28 28 Z' fill='%23D8BD8E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+        --ivory: #FBF6EF;
+        --card: #FFFFFF;
+        --wine: #4A1625;
+        --wine-deep: #2C0E18;
+        --brass: #AD8A54;
+        --brass-light: #D8BD8E;
+        --blush: #EFD9D3;
+        --ink: #2B2320;
+        --ink-soft: #6b5f58;
+        --ring: rgba(173, 138, 84, 0.25);
+        --surface: #4A1625;
+        --on-dark: #FBF6EF;
+        --red: #b23a48;
+    }
+
+    body.dark-theme {
+        --ivory: #1C1014;
+        --card: #2A1620;
+        --wine: #F1DCC0;
+        --wine-deep: #120a0d;
+        --brass: #D8BD8E;
+        --brass-light: #D8BD8E;
+        --blush: #3a2029;
+        --ink: #F2E9E4;
+        --ink-soft: #baa9a2;
+        --ring: rgba(216, 189, 142, 0.2);
+    }
+
+    body {
+        font-family: 'Work Sans', sans-serif;
+        line-height: 1.7;
+        color: var(--ink);
+        background: var(--ivory);
+        min-height: 100vh;
+        padding: 60px 1.5rem;
+        transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .page-header a.logo {
+        font-size: 1.6rem;
+        font-weight: 600;
+        font-style: italic;
+        color: var(--wine);
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+    }
+
+    .page-header a.logo span {
+        font-family: 'Work Sans', sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        color: var(--brass);
+        vertical-align: middle;
+        margin-left: 6px;
+    }
+
+    .page-header h1 {
+        font-size: 2.2rem;
+        font-weight: 400;
+        color: var(--wine);
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header h1 em { font-style: italic; font-weight: 600; }
+
+    .page-header p {
+        color: var(--ink-soft);
+        font-size: 1.05rem;
+    }
+
+    .booking-form-wrap {
+        max-width: 700px;
+        margin: 0 auto;
+        background: var(--card);
+        border-radius: 4px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(44, 14, 24, 0.08);
+        border: 1px solid var(--ring);
+        position: relative;
+    }
+
+    .booking-form-wrap::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 2.5rem; right: 2.5rem;
+        height: 2px;
+        background: var(--brass);
+    }
+
+    .booking-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+    }
+
+    .stylist-picker {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .stylist-card {
+        background: var(--ivory);
+        border: 1px solid var(--ring);
+        border-radius: 4px;
+        padding: 1.1rem 0.8rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .stylist-card:hover {
+        border-color: var(--brass);
+        transform: translateY(-2px);
+    }
+
+    .stylist-card.selected {
+        background: var(--surface);
+        border-color: var(--surface);
+    }
+
+    .stylist-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        margin: 0 auto 0.6rem;
+        background: var(--blush);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-style: italic;
+        color: var(--wine);
+        font-size: 1.2rem;
+    }
+
+    .stylist-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+    }
+
+    .stylist-avatar .fallback-initial {
+        display: block;
+    }
+
+    .stylist-name {
+        font-family: 'Fraunces', serif;
+        font-weight: 500;
+        font-style: italic;
+        font-size: 0.92rem;
+        color: var(--wine);
+        margin-bottom: 2px;
+    }
+
+    .stylist-card.selected .stylist-name {
+        color: var(--on-dark);
+    }
+
+    .stylist-specialty {
+        font-size: 0.72rem;
+        color: var(--ink-soft);
+        margin-bottom: 6px;
+    }
+
+    .stylist-card.selected .stylist-specialty {
+        color: rgba(251, 246, 239, 0.75);
+    }
+
+    .stylist-availability {
+        font-size: 0.68rem;
+        font-weight: 600;
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+
+    .stylist-availability.open {
+        background: rgba(76, 175, 80, 0.15);
+        color: #3d8a42;
+    }
+
+    .stylist-availability.busy {
+        background: rgba(178, 58, 72, 0.12);
+        color: #b23a48;
+    }
+
+    .stylist-card.selected .stylist-availability.open,
+    .stylist-card.selected .stylist-availability.busy {
+        background: rgba(251, 246, 239, 0.15);
+        color: var(--on-dark);
+    }
+
+    .stylist-mock-note {
+        font-size: 0.75rem;
+        color: var(--ink-soft);
+        margin-top: 0.6rem;
+        font-style: italic;
+    }
+
+    .slot-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+        gap: 8px;
+        margin-top: 0.5rem;
+    }
+
+    .slot-btn {
+        padding: 10px 6px;
+        border-radius: 4px;
+        border: 1px solid var(--ring);
+        background: var(--ivory);
+        color: var(--ink);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .slot-btn:hover:not(:disabled) {
+        border-color: var(--brass);
+        transform: translateY(-1px);
+    }
+
+    .slot-btn.selected {
+        background: var(--surface);
+        border-color: var(--surface);
+        color: var(--on-dark);
+    }
+
+    .slot-btn:disabled {
+        background: rgba(178, 58, 72, 0.06);
+        border-color: rgba(178, 58, 72, 0.15);
+        color: var(--red);
+        text-decoration: line-through;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .slot-empty-note {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        padding: 1rem;
+        text-align: center;
+        border: 1px dashed var(--ring);
+        border-radius: 4px;
+    }
+
+    .slot-legend {
+        display: flex;
+        gap: 1.2rem;
+        margin-top: 0.7rem;
+        font-size: 0.75rem;
+        color: var(--ink-soft);
+    }
+
+    .slot-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .slot-legend-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .slot-legend-dot.open { background: var(--brass); }
+    .slot-legend-dot.taken { background: var(--red); }
+
+    .booking-form-wrap label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.3px;
+        color: var(--wine);
+        margin-bottom: 0.4rem;
+        margin-top: 1.2rem;
+    }
+
+    .booking-form-wrap input,
+    .booking-form-wrap select,
+    .booking-form-wrap textarea {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        border: 1px solid var(--ring);
+        border-radius: 4px;
+        font-family: 'Work Sans', sans-serif;
+        font-size: 0.95rem;
+        transition: border-color 0.3s ease;
+        background: var(--ivory);
+        color: var(--ink);
+    }
+
+    .booking-form-wrap input:focus,
+    .booking-form-wrap select:focus,
+    .booking-form-wrap textarea:focus {
+        outline: none;
+        border-color: var(--brass);
+        background: var(--card);
+    }
+
+    .booking-form-wrap textarea {
+        resize: vertical;
+        min-height: 90px;
+    }
+
+    .booking-submit-btn {
+        width: 100%;
+        margin-top: 2rem;
+        padding: 1.1rem;
+        background: var(--surface);
+        color: var(--on-dark);
+        border: 1px solid var(--surface);
+        border-radius: 50px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .booking-submit-btn:hover {
+        background: transparent;
+        color: var(--wine);
+        transform: translateY(-2px);
+    }
+
+    .booking-note {
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        margin-top: 1rem;
+    }
+
+    .deposit-section {
+        margin-top: 1.8rem;
+        padding-top: 1.6rem;
+        border-top: 1px dashed var(--ring);
+    }
+
+    .deposit-notice {
+        background: var(--blush);
+        border-radius: 4px;
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 1.2rem;
+        font-size: 0.85rem;
+        color: var(--ink);
+        line-height: 1.6;
+    }
+
+    body.dark-theme .deposit-notice {
+        background: rgba(216, 189, 142, 0.1);
+    }
+
+    .deposit-amount {
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-style: italic;
+        color: var(--wine);
+        font-size: 1.05rem;
+    }
+
+    .deposit-provider-toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 1.2rem;
+    }
+
+    .deposit-provider-btn {
+        flex: 1;
+        padding: 10px 6px;
+        background: var(--ivory);
+        border: 1px solid var(--ring);
+        border-radius: 4px;
+        color: var(--ink-soft);
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.25s ease;
+    }
+
+    .deposit-provider-btn.active-mpesa { background: #4caf50; color: #fff; border-color: #4caf50; }
+    .deposit-provider-btn.active-airtel { background: #e60000; color: #fff; border-color: #e60000; }
+    .deposit-provider-btn.active-card { background: var(--surface); color: var(--on-dark); border-color: var(--surface); }
+
+    .deposit-method-fields { display: none; }
+    .deposit-method-fields.active { display: block; }
+
+    .deposit-error {
+        color: var(--red);
+        font-size: 0.78rem;
+        margin-top: 0.4rem;
+        display: none;
+    }
+
+    .policy-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 1.2rem;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+        line-height: 1.5;
+    }
+
+    .policy-checkbox input {
+        width: auto;
+        margin-top: 3px;
+        accent-color: var(--surface);
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--brass);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+        .booking-row { grid-template-columns: 1fr; }
+        .booking-form-wrap { padding: 2rem 1.5rem; }
+    }
+
+    /* Booking Confirmation Modal */
+    .booking-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(44, 14, 24, 0.55);
+        z-index: 3000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .booking-modal.open { display: flex; }
+
+    .booking-modal-box {
+        background: var(--card);
+        border-radius: 4px;
+        padding: 3rem 2.5rem;
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+    }
+
+    .booking-modal-box::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 2rem; right: 2rem;
+        height: 2px;
+        background: var(--brass);
+    }
+
+    .booking-modal-box .check-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--brass);
+    }
+
+    .booking-modal-box h3 {
+        font-size: 1.4rem;
+        font-weight: 500;
+        font-style: italic;
+        margin-bottom: 0.8rem;
+        color: var(--wine);
+    }
+
+    .booking-modal-box p {
+        color: var(--ink-soft);
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .booking-summary {
+        text-align: left;
+        background: var(--ivory);
+        border-radius: 4px;
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--ink);
+    }
+
+    .booking-summary div {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+        border-bottom: 1px dashed var(--ring);
+    }
+
+    .booking-summary div:last-child { border-bottom: none; }
+
+    .booking-summary span { color: var(--ink-soft); }
+    .booking-summary strong { color: var(--wine); }
+
+    .booking-ref-badge {
+        display: inline-block;
+        background: var(--blush);
+        color: var(--wine);
+        font-family: 'Fraunces', serif;
+        font-weight: 600;
+        font-style: italic;
+        font-size: 1.1rem;
+        padding: 6px 18px;
+        border-radius: 20px;
+        margin-bottom: 1.2rem;
+        letter-spacing: 0.5px;
+    }
+
+    body.dark-theme .booking-ref-badge {
+        background: rgba(216, 189, 142, 0.15);
+    }
+
+    .confirmation-channels {
+        text-align: left;
+        margin-bottom: 1.5rem;
+    }
+
+    .confirmation-channel {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        padding: 8px 0;
+    }
+
+    .confirmation-channel svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--brass);
+        fill: none;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .confirmation-channel strong {
+        color: var(--ink);
+        display: block;
+        font-size: 0.85rem;
+    }
+
+    .confirmation-pending-tag {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--brass);
+        border: 1px solid var(--ring);
+        padding: 1px 7px;
+        border-radius: 10px;
+        margin-left: 6px;
+    }
+
+    .booking-modal-close {
+        width: 100%;
+        padding: 0.9rem;
+        background: var(--surface);
+        color: var(--on-dark);
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999;
+        background: var(--card);
+        border: 1px solid var(--ring);
+        color: var(--wine);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.08);
+    }
+</style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode" aria-label="Toggle dark mode">☾</button>
+
+    <div class="page-header">
+        <a href="salon.html" class="logo">Luxe<span>SALON</span></a>
+        <h1>Book Your <em>Appointment</em></h1>
+        <p>Fill in your details and we'll confirm your slot</p>
+    </div>
+
+    <div class="booking-form-wrap">
+        <form id="bookingForm" novalidate>
+            <div class="booking-row">
+                <div>
+                    <label for="bookName">Full Name</label>
+                    <input type="text" id="bookName" placeholder="Jane Doe" required>
+                </div>
+                <div>
+                    <label for="bookPhone">Phone Number</label>
+                    <input type="tel" id="bookPhone" placeholder="0712 345 678" required>
+                </div>
+            </div>
+
+            <label for="bookEmail">Email Address</label>
+            <input type="email" id="bookEmail" placeholder="jane@example.com" required>
+
+            <label for="bookService">Service</label>
+            <select id="bookService" required>
+                <option value="">Select a service...</option>
+                <optgroup label="Hair Services">
+                    <option value="Hair Cutting">Hair Cutting - From KES 4,000</option>
+                    <option value="Hair Coloring">Hair Coloring - From KES 8,000</option>
+                    <option value="Hair Spa & Treatment">Hair Spa & Treatment - From KES 6,000</option>
+                    <option value="Bridal Services">Bridal Services - From KES 19,500</option>
+                </optgroup>
+                <optgroup label="Nail & Makeup">
+                    <option value="Nail Services">Nail Services - From KES 3,000</option>
+                    <option value="Makeup & Styling">Makeup & Styling - From KES 5,000</option>
+                    <option value="Bridal Makeup">Bridal Makeup - From KES 26,000</option>
+                    <option value="Party Makeup">Party Makeup - From KES 10,500</option>
+                </optgroup>
+                <optgroup label="Packages">
+                    <option value="Basic Package">Basic Package - KES 6,500/visit</option>
+                    <option value="Premium Package">Premium Package - KES 15,500/visit</option>
+                    <option value="VIP Package">VIP Package - KES 26,000/visit</option>
+                </optgroup>
+            </select>
+
+            <label>Choose Your Stylist <span style="font-weight:400; color:var(--ink-soft); text-transform:none; letter-spacing:0;">(optional)</span></label>
+            <div class="stylist-picker" id="stylistPicker" role="radiogroup" aria-label="Choose your stylist">
+                <div class="stylist-card selected" data-stylist="No Preference" role="radio" aria-checked="true" tabindex="0">
+                    <div class="stylist-avatar" aria-hidden="true">—</div>
+                    <div class="stylist-name">No Preference</div>
+                    <div class="stylist-specialty">Any available stylist</div>
+                </div>
+                <div class="stylist-card" data-stylist="Amara K." role="radio" aria-checked="false" tabindex="0">
+                    <div class="stylist-avatar" aria-hidden="true">
+                        <img src="IMAGE_STYLIST_AMARA.jpg" alt="" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+                        <span class="fallback-initial">A</span>
+                    </div>
+                    <div class="stylist-name">Amara K.</div>
+                    <div class="stylist-specialty">Hair & Color Specialist</div>
+                    <span class="stylist-availability open">Open Today</span>
+                </div>
+                <div class="stylist-card" data-stylist="Brian O." role="radio" aria-checked="false" tabindex="0">
+                    <div class="stylist-avatar" aria-hidden="true">
+                        <img src="IMAGE_STYLIST_BRIAN.jpg" alt="" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+                        <span class="fallback-initial">B</span>
+                    </div>
+                    <div class="stylist-name">Brian O.</div>
+                    <div class="stylist-specialty">Barbering & Cuts</div>
+                    <span class="stylist-availability busy">Booked This Week</span>
+                </div>
+                <div class="stylist-card" data-stylist="Faith N." role="radio" aria-checked="false" tabindex="0">
+                    <div class="stylist-avatar" aria-hidden="true">
+                        <img src="IMAGE_STYLIST_FAITH.jpg" alt="" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+                        <span class="fallback-initial">F</span>
+                    </div>
+                    <div class="stylist-name">Faith N.</div>
+                    <div class="stylist-specialty">Makeup & Nails</div>
+                    <span class="stylist-availability open">Open Today</span>
+                </div>
+            </div>
+            <p class="stylist-mock-note">Names, photos, and availability shown here are examples — real stylist profiles and live schedules will replace these once connected to our booking system.</p>
+
+            <div class="booking-row">
+                <div>
+                    <label for="bookDate">Preferred Date</label>
+                    <input type="date" id="bookDate" required>
+                </div>
+                <div>
+                    <label>Available Times</label>
+                    <p id="timeHint" style="font-size: 0.78rem; color: var(--ink-soft); margin-top: -0.3rem; margin-bottom: 0.5rem;">Mon-Fri: 9AM-8PM &nbsp;·&nbsp; Sat-Sun: 10AM-6PM</p>
+                </div>
+            </div>
+
+            <input type="hidden" id="bookTime" required>
+            <div class="slot-grid" id="slotGrid">
+                <p class="slot-empty-note">Pick a date above to see available time slots.</p>
+            </div>
+            <div class="slot-legend">
+                <span><span class="slot-legend-dot open"></span> Available</span>
+                <span><span class="slot-legend-dot taken"></span> Already booked</span>
+            </div>
+            <p id="timeError" style="font-size: 0.78rem; color: var(--red); margin-top: 0.5rem; display: none;"></p>
+
+            <label for="bookNotes">Additional Notes (optional)</label>
+            <textarea id="bookNotes" placeholder="Any special requests..."></textarea>
+
+            <div class="deposit-section">
+                <div class="deposit-notice">
+                    To secure your slot, we require a <span class="deposit-amount">KES 500 deposit</span>, deducted from your final bill. This deposit is <strong>non-refundable</strong> if you cancel or don't show up with less than 24 hours' notice.
+                </div>
+
+                <div class="deposit-provider-toggle">
+                    <div class="deposit-provider-btn active-mpesa" id="depBtnMpesa">M-Pesa</div>
+                    <div class="deposit-provider-btn" id="depBtnAirtel">Airtel Money</div>
+                    <div class="deposit-provider-btn" id="depBtnCard">Card</div>
+                </div>
+
+                <div class="deposit-method-fields active" id="depMobileFields">
+                    <label for="depPhone" id="depPhoneLabel">M-Pesa Phone Number</label>
+                    <input type="tel" id="depPhone" placeholder="0712 345 678" maxlength="10" inputmode="numeric">
+                    <p class="deposit-error" id="depPhoneError">Enter a valid phone number e.g. 0712345678</p>
+                </div>
+
+                <div class="deposit-method-fields" id="depCardFields">
+                    <label for="depCardName">Name on Card</label>
+                    <input type="text" id="depCardName" placeholder="Jane Doe">
+
+                    <label for="depCardNumber">Card Number</label>
+                    <input type="text" id="depCardNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric">
+                    <p class="deposit-error" id="depCardError">Enter a valid 16-digit card number</p>
+
+                    <div class="booking-row">
+                        <div>
+                            <label for="depExpiry">Expiry (MM/YY)</label>
+                            <input type="text" id="depExpiry" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div>
+                            <label for="depCvv">CVV</label>
+                            <input type="password" id="depCvv" placeholder="123" maxlength="4" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+
+                <label class="policy-checkbox">
+                    <input type="checkbox" id="policyAgree">
+                    I understand this deposit is non-refundable if I cancel or don't show up with less than 24 hours' notice.
+                </label>
+                <p class="deposit-error" id="policyError">Please confirm you understand the deposit policy.</p>
+            </div>
+
+            <button type="submit" class="booking-submit-btn">Pay Deposit &amp; Confirm Booking</button>
+            <p class="booking-note">We're open Mon-Fri 9AM-8PM, Sat-Sun 10AM-6PM. We'll call to confirm your slot.</p>
+        </form>
+        <a href="salon.html" class="back-link">← Back to Luxe Salon</a>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="booking-modal-box">
+            <div class="check-icon">✦</div>
+            <h3>Booking Request Received!</h3>
+            <div class="booking-ref-badge" id="bookingRefBadge"></div>
+            <div class="booking-summary" id="bookingSummary"></div>
+
+            <div class="confirmation-channels">
+                <div class="confirmation-channel">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                    <div>
+                        <strong>Email confirmation <span class="confirmation-pending-tag">Pending Setup</span></strong>
+                        Will be sent to the address you provided once this is connected to our booking system.
+                    </div>
+                </div>
+                <div class="confirmation-channel">
+                    <svg viewBox="0 0 24 24"><path d="M5 4h14v13l-4-3H5z"/></svg>
+                    <div>
+                        <strong>SMS confirmation <span class="confirmation-pending-tag">Pending Setup</span></strong>
+                        Will be sent to your phone number once this is connected to our booking system.
+                    </div>
+                </div>
+                <div class="confirmation-channel">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    <div>
+                        <strong>For now</strong>
+                        We'll call you directly at the number you provided to confirm your slot.
+                    </div>
+                </div>
+            </div>
+
+            <button class="booking-modal-close" onclick="closeBookingModal()">Close</button>
+            <p style="text-align:center; font-size:0.82rem; color:var(--ink-soft); margin-top:1rem;">After your visit, we'd love to hear how it went — <a href="review.html" style="color:var(--brass); font-weight:600; text-decoration:none;">leave a review</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        // Dark Theme (shared with salon.html via localStorage)
+        function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.textContent = '☀';
+            }
+
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                if (document.body.classList.contains('dark-theme')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.textContent = '☀';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.textContent = '☾';
+                }
+            });
+        }
+        initTheme();
+
+        // Stylist picker
+        let selectedStylist = 'No Preference';
+        const stylistCards = document.querySelectorAll('.stylist-card');
+
+        function selectStylist(card) {
+            stylistCards.forEach(c => {
+                c.classList.remove('selected');
+                c.setAttribute('aria-checked', 'false');
+            });
+            card.classList.add('selected');
+            card.setAttribute('aria-checked', 'true');
+            selectedStylist = card.getAttribute('data-stylist');
+            if (typeof renderSlotGrid === 'function' && document.getElementById('bookDate').value) {
+                renderSlotGrid();
+            }
+        }
+
+        stylistCards.forEach(card => {
+            card.addEventListener('click', () => selectStylist(card));
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectStylist(card);
+                }
+            });
+        });
+
+        document.getElementById('bookDate').min = new Date().toISOString().split('T')[0];
+
+        const HOURS = {
+            weekday: { min: '09:00', max: '20:00', label: '9AM - 8PM' },
+            weekend: { min: '10:00', max: '18:00', label: '10AM - 6PM' }
+        };
+
+        function getHoursForDate(dateStr) {
+            if (!dateStr) return HOURS.weekday;
+            const day = new Date(dateStr + 'T00:00:00').getDay(); // 0=Sun, 6=Sat
+            return (day === 0 || day === 6) ? HOURS.weekend : HOURS.weekday;
+        }
+
+        function generateSlotTimes(rules) {
+            const slots = [];
+            let [h, m] = rules.min.split(':').map(Number);
+            const [maxH] = rules.max.split(':').map(Number);
+            while (h < maxH) {
+                slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+                h += 1; // 60-minute slots
+            }
+            return slots;
+        }
+
+        function formatSlotLabel(time24) {
+            return new Date('2000-01-01T' + time24).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        }
+
+        // Checks real bookings saved in this browser's localStorage for conflicts.
+        // Not a mock — this reflects whatever has actually been submitted through
+        // this booking form before. A real backend would run this same check
+        // against the shared bookings database instead of one browser's storage.
+        function isSlotTaken(dateVal, timeVal, stylist) {
+            const bookings = JSON.parse(localStorage.getItem('luxeSalonBookings') || '[]');
+            const namedStylists = ['Amara K.', 'Brian O.', 'Faith N.'];
+
+            if (stylist === 'No Preference') {
+                // Fully booked only if every named stylist is taken at this exact slot
+                return namedStylists.every(name =>
+                    bookings.some(b => b.date === dateVal && b.time === timeVal && b.stylist === name)
+                );
+            }
+            return bookings.some(b => b.date === dateVal && b.time === timeVal && b.stylist === stylist);
+        }
+
+        let selectedTime = '';
+
+        // Deposit payment method toggle
+        let depositMethod = 'mpesa';
+        const depPrefixPattern = {
+            mpesa: /^0(7(0[0-9]|1[0-9]|2[0-9]|5[0-9]|6[0-8]|9[0-2])|11[0-5])\d{6}$/,
+            airtel: /^0(10[0-2]|7(3[0-9]|5[0-6]|8[0-9]))\d{6}$/
+        };
+
+        function setDepositMethod(m) {
+            depositMethod = m;
+            ['depBtnMpesa', 'depBtnAirtel', 'depBtnCard'].forEach(id => {
+                document.getElementById(id).className = 'deposit-provider-btn';
+            });
+            document.getElementById('depPhoneError').style.display = 'none';
+            document.getElementById('depCardError').style.display = 'none';
+            document.getElementById('depPhone').value = '';
+
+            const mobileFields = document.getElementById('depMobileFields');
+            const cardFields = document.getElementById('depCardFields');
+            const phoneLabel = document.getElementById('depPhoneLabel');
+
+            if (m === 'mpesa') {
+                document.getElementById('depBtnMpesa').classList.add('active-mpesa');
+                phoneLabel.textContent = 'M-Pesa Phone Number';
+                mobileFields.classList.add('active');
+                cardFields.classList.remove('active');
+            } else if (m === 'airtel') {
+                document.getElementById('depBtnAirtel').classList.add('active-airtel');
+                phoneLabel.textContent = 'Airtel Money Phone Number';
+                mobileFields.classList.add('active');
+                cardFields.classList.remove('active');
+            } else {
+                document.getElementById('depBtnCard').classList.add('active-card');
+                mobileFields.classList.remove('active');
+                cardFields.classList.add('active');
+            }
+        }
+
+        document.getElementById('depBtnMpesa').addEventListener('click', () => setDepositMethod('mpesa'));
+        document.getElementById('depBtnAirtel').addEventListener('click', () => setDepositMethod('airtel'));
+        document.getElementById('depBtnCard').addEventListener('click', () => setDepositMethod('card'));
+
+        document.getElementById('depPhone').addEventListener('input', function() {
+            this.value = this.value.replace(/[^\d]/g, '').slice(0, 10);
+        });
+
+        document.getElementById('depCardNumber').addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '').slice(0, 16);
+            this.value = v.replace(/(.{4})/g, '$1 ').trim();
+        });
+
+        document.getElementById('depExpiry').addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '').slice(0, 4);
+            if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+            this.value = v;
+        });
+
+        // Validates deposit fields; returns true if OK, shows inline error and returns false otherwise
+        function validateDepositFields() {
+            if (depositMethod === 'mpesa' || depositMethod === 'airtel') {
+                const phone = document.getElementById('depPhone').value;
+                const errorEl = document.getElementById('depPhoneError');
+                if (!depPrefixPattern[depositMethod].test(phone)) {
+                    errorEl.style.display = 'block';
+                    return false;
+                }
+                errorEl.style.display = 'none';
+                return true;
+            } else {
+                const digits = document.getElementById('depCardNumber').value.replace(/\D/g, '');
+                const errorEl = document.getElementById('depCardError');
+                if (digits.length !== 16) {
+                    errorEl.style.display = 'block';
+                    return false;
+                }
+                errorEl.style.display = 'none';
+                return true;
+            }
+        }
+
+        function renderSlotGrid() {
+            const dateVal = document.getElementById('bookDate').value;
+            const hint = document.getElementById('timeHint');
+            const grid = document.getElementById('slotGrid');
+            document.getElementById('bookTime').value = '';
+            selectedTime = '';
+
+            if (!dateVal) {
+                grid.innerHTML = '<p class="slot-empty-note">Pick a date above to see available time slots.</p>';
+                hint.textContent = 'Mon-Fri: 9AM-8PM · Sat-Sun: 10AM-6PM';
+                return;
+            }
+
+            const rules = getHoursForDate(dateVal);
+            hint.textContent = `Hours for this day: ${rules.label}`;
+            const slots = generateSlotTimes(rules);
+
+            grid.innerHTML = slots.map(slot => {
+                const taken = isSlotTaken(dateVal, slot, selectedStylist);
+                const label = formatSlotLabel(slot);
+                return `<button type="button" class="slot-btn" data-time="${slot}" ${taken ? 'disabled' : ''} aria-pressed="false">${label}</button>`;
+            }).join('');
+
+            grid.querySelectorAll('.slot-btn:not(:disabled)').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    grid.querySelectorAll('.slot-btn').forEach(b => {
+                        b.classList.remove('selected');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    this.classList.add('selected');
+                    this.setAttribute('aria-pressed', 'true');
+                    selectedTime = this.getAttribute('data-time');
+                    document.getElementById('bookTime').value = selectedTime;
+                    document.getElementById('timeError').style.display = 'none';
+                });
+            });
+        }
+
+        document.getElementById('bookDate').addEventListener('change', renderSlotGrid);
+        renderSlotGrid();
+
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+
+            const name = document.getElementById('bookName').value.trim();
+            const phone = document.getElementById('bookPhone').value.trim();
+            const email = document.getElementById('bookEmail').value.trim();
+            const service = document.getElementById('bookService').value;
+            const date = document.getElementById('bookDate').value;
+            const time = document.getElementById('bookTime').value;
+
+            if (!name || !phone || !email || !service || !date) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const timeErrorEl = document.getElementById('timeError');
+            if (!time) {
+                timeErrorEl.textContent = 'Please select an available time slot.';
+                timeErrorEl.style.display = 'block';
+                return;
+            }
+            timeErrorEl.style.display = 'none';
+
+            if (!validateDepositFields()) {
+                return;
+            }
+
+            const policyErrorEl = document.getElementById('policyError');
+            if (!document.getElementById('policyAgree').checked) {
+                policyErrorEl.style.display = 'block';
+                return;
+            }
+            policyErrorEl.style.display = 'none';
+
+            const submitBtn = this.querySelector('.booking-submit-btn');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing Deposit...';
+
+            const depositPhone = document.getElementById('depPhone').value;
+            const depositLabel = depositMethod === 'mpesa' ? 'M-Pesa' : depositMethod === 'airtel' ? 'Airtel Money' : 'Card';
+
+            // TEMP: deposit "payment" is simulated with a delay, same as the
+            // funeral site's demo checkout. A real integration needs Safaricom's
+            // Daraja API (M-Pesa), Airtel's Money OpenAPI, or a PCI-compliant
+            // processor for cards — this cannot be done from the browser alone.
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+                finalizeBooking();
+            }, 1800);
+
+            function finalizeBooking() {
+
+            const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const formattedTime = new Date('2000-01-01T' + time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+            // TEMP: reference number generated client-side for demo purposes only.
+            // Once a real backend exists, this should come from the server response
+            // after the booking is actually saved to the database (e.g. "LX-000482"),
+            // and this is also the point where the real email/SMS API calls happen server-side.
+            const bookingRef = 'LX-' + Math.floor(1000 + Math.random() * 9000);
+
+            // TEMP: saved to this browser's localStorage only, so the admin dashboard
+            // demo has something to display. A real backend would save this to a
+            // bookings table instead, visible to the owner from any device.
+            const BOOKINGS_KEY = 'luxeSalonBookings';
+            let allBookings = [];
+            try {
+                allBookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY)) || [];
+            } catch { allBookings = []; }
+            allBookings.push({
+                ref: bookingRef, name, phone, email, service,
+                stylist: selectedStylist, date, time,
+                notes: document.getElementById('bookNotes').value.trim(),
+                depositMethod: depositLabel,
+                depositAmount: 500,
+                status: 'pending',
+                submittedAt: new Date().toISOString()
+            });
+            localStorage.setItem(BOOKINGS_KEY, JSON.stringify(allBookings));
+
+            document.getElementById('bookingRefBadge').textContent = `Reference: ${bookingRef}`;
+
+            document.getElementById('bookingSummary').innerHTML = `
+                <div><span>Name</span><strong>${name}</strong></div>
+                <div><span>Service</span><strong>${service}</strong></div>
+                <div><span>Stylist</span><strong>${selectedStylist}</strong></div>
+                <div><span>Date</span><strong>${formattedDate}</strong></div>
+                <div><span>Time</span><strong>${formattedTime}</strong></div>
+                <div><span>Phone</span><strong>${phone}</strong></div>
+                <div><span>Deposit Paid</span><strong>KES 500 (${depositLabel})</strong></div>
+            `;
+
+            document.getElementById('bookingModal').classList.add('open');
+            form.reset();
+            document.getElementById('bookDate').min = new Date().toISOString().split('T')[0];
+            selectStylist(stylistCards[0]);
+            renderSlotGrid();
+            setDepositMethod('mpesa');
+            }
+        });
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.remove('open');
+        }
+
+        document.getElementById('bookingModal').addEventListener('click', function(e) {
+            if (e.target === this) closeBookingModal();
+        });
+    </script>
+</body>
+</html>

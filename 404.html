@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found - Luxe Salon</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%234A1625'/%3E%3Ccircle cx='32' cy='32' r='30' fill='none' stroke='%23AD8A54' stroke-width='3'/%3E%3Cpath d='M32 16 L36 28 L48 32 L36 36 L32 48 L28 36 L16 32 L28 28 Z' fill='%23D8BD8E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+        --ivory: #FBF6EF;
+        --card: #FFFFFF;
+        --wine: #4A1625;
+        --brass: #AD8A54;
+        --brass-light: #D8BD8E;
+        --blush: #EFD9D3;
+        --ink: #2B2320;
+        --ink-soft: #6b5f58;
+        --ring: rgba(173, 138, 84, 0.25);
+        --surface: #4A1625;
+        --on-dark: #FBF6EF;
+    }
+
+    body {
+        font-family: 'Work Sans', sans-serif;
+        color: var(--ink);
+        background: var(--ivory);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .wrap {
+        max-width: 480px;
+    }
+
+    .mirror-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 220px;
+        margin-bottom: 1.5rem;
+    }
+
+    .mirror {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, var(--blush) 0%, var(--card) 70%);
+        border: 1px solid var(--ring);
+        box-shadow: 0 20px 45px rgba(44, 14, 24, 0.12), inset 0 0 30px rgba(173, 138, 84, 0.08);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Fraunces', serif;
+        font-size: 2.6rem;
+        font-weight: 600;
+        font-style: italic;
+        color: var(--wine);
+    }
+
+    .bulb-ring {
+        position: absolute;
+        width: 210px;
+        height: 210px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .bulb {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brass-light);
+        box-shadow: 0 0 6px 2px var(--brass-light);
+        top: 50%;
+        left: 50%;
+        animation: bulb-glow 3.6s ease-in-out infinite;
+    }
+
+    @keyframes bulb-glow {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .bulb { animation: none; opacity: 0.75; }
+    }
+
+    h1 {
+        font-family: 'Fraunces', serif;
+        font-weight: 400;
+        font-size: 1.9rem;
+        color: var(--wine);
+        margin-bottom: 0.8rem;
+    }
+
+    h1 em { font-style: italic; font-weight: 600; }
+
+    p {
+        color: var(--ink-soft);
+        font-size: 1rem;
+        margin-bottom: 2rem;
+        line-height: 1.7;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 1rem 2.3rem;
+        background: var(--surface);
+        color: var(--on-dark);
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        border: 1px solid var(--surface);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(44, 14, 24, 0.2);
+    }
+</style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="mirror-wrap">
+            <div class="bulb-ring" id="bulbRing"></div>
+            <div class="mirror">404</div>
+        </div>
+        <h1>This page stepped out of <em>frame.</em></h1>
+        <p>The page you're looking for isn't here — perhaps it was moved, renamed, or never existed. Let's get you back to somewhere familiar.</p>
+        <a href="salon.html" class="cta-button">Back to Luxe Salon</a>
+    </div>
+
+    <script>
+        const ring = document.getElementById('bulbRing');
+        const radius = ring.offsetWidth / 2 || 105;
+        const count = 10;
+        for (let i = 0; i < count; i++) {
+            const angle = (i / count) * 2 * Math.PI;
+            const bulb = document.createElement('div');
+            bulb.className = 'bulb';
+            bulb.style.transform = `translate(${Math.cos(angle) * radius}px, ${Math.sin(angle) * radius}px)`;
+            bulb.style.animationDelay = `${(i * 0.3).toFixed(2)}s`;
+            ring.appendChild(bulb);
+        }
+    </script>
+</body>
+</html>

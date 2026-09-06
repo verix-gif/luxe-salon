@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Share Your Experience - Luxe Salon</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%234A1625'/%3E%3Ccircle cx='32' cy='32' r='30' fill='none' stroke='%23AD8A54' stroke-width='3'/%3E%3Cpath d='M32 16 L36 28 L48 32 L36 36 L32 48 L28 36 L16 32 L28 28 Z' fill='%23D8BD8E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+        --ivory: #FBF6EF;
+        --card: #FFFFFF;
+        --wine: #4A1625;
+        --wine-deep: #2C0E18;
+        --brass: #AD8A54;
+        --brass-light: #D8BD8E;
+        --blush: #EFD9D3;
+        --ink: #2B2320;
+        --ink-soft: #6b5f58;
+        --ring: rgba(173, 138, 84, 0.25);
+        --surface: #4A1625;
+        --on-dark: #FBF6EF;
+    }
+
+    body.dark-theme {
+        --ivory: #1C1014;
+        --card: #2A1620;
+        --wine: #F1DCC0;
+        --wine-deep: #120a0d;
+        --brass: #D8BD8E;
+        --brass-light: #D8BD8E;
+        --blush: #3a2029;
+        --ink: #F2E9E4;
+        --ink-soft: #baa9a2;
+        --ring: rgba(216, 189, 142, 0.2);
+    }
+
+    body {
+        font-family: 'Work Sans', sans-serif;
+        line-height: 1.7;
+        color: var(--ink);
+        background: var(--ivory);
+        min-height: 100vh;
+        padding: 60px 1.5rem;
+        transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    h1, h2 { font-family: 'Fraunces', serif; }
+
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999;
+        background: var(--card);
+        border: 1px solid var(--ring);
+        color: var(--wine);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover { transform: scale(1.08); }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .page-header a.logo {
+        font-size: 1.6rem;
+        font-weight: 600;
+        font-style: italic;
+        color: var(--wine);
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+    }
+
+    .page-header a.logo span {
+        font-family: 'Work Sans', sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        color: var(--brass);
+        vertical-align: middle;
+        margin-left: 6px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: 400;
+        color: var(--wine);
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header h1 em { font-style: italic; font-weight: 600; }
+
+    .page-header p {
+        color: var(--ink-soft);
+        font-size: 1.02rem;
+        max-width: 460px;
+        margin: 0 auto;
+    }
+
+    .review-form-wrap {
+        max-width: 620px;
+        margin: 2.5rem auto 0;
+        background: var(--card);
+        border-radius: 4px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(44, 14, 24, 0.08);
+        border: 1px solid var(--ring);
+        position: relative;
+    }
+
+    .review-form-wrap::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 2.5rem; right: 2.5rem;
+        height: 2px;
+        background: var(--brass);
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.3px;
+        color: var(--wine);
+        margin-bottom: 0.5rem;
+        margin-top: 1.4rem;
+    }
+
+    label:first-of-type { margin-top: 0; }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        border: 1px solid var(--ring);
+        border-radius: 4px;
+        font-family: 'Work Sans', sans-serif;
+        font-size: 0.95rem;
+        background: var(--ivory);
+        color: var(--ink);
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: var(--brass);
+        background: var(--card);
+    }
+
+    textarea { resize: vertical; min-height: 110px; }
+
+    .star-picker {
+        display: flex;
+        gap: 8px;
+        margin-top: 0.3rem;
+    }
+
+    .star-picker button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 2px;
+    }
+
+    .star-picker svg {
+        width: 34px;
+        height: 34px;
+        fill: none;
+        stroke: var(--brass);
+        stroke-width: 1.5;
+        transition: fill 0.2s ease;
+    }
+
+    .star-picker svg.filled {
+        fill: var(--brass);
+    }
+
+    .star-label {
+        margin-top: 0.6rem;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        min-height: 1.2em;
+    }
+
+    .submit-btn {
+        width: 100%;
+        margin-top: 2rem;
+        padding: 1.1rem;
+        background: var(--surface);
+        color: var(--on-dark);
+        border: 1px solid var(--surface);
+        border-radius: 50px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--brass);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    .form-note {
+        text-align: center;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+        margin-top: 1rem;
+    }
+
+    /* Confirmation Modal */
+    .review-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(44, 14, 24, 0.55);
+        z-index: 3000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .review-modal.open { display: flex; }
+
+    .review-modal-box {
+        background: var(--card);
+        border-radius: 4px;
+        padding: 3rem 2.5rem;
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+    }
+
+    .review-modal-box::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 2rem; right: 2rem;
+        height: 2px;
+        background: var(--brass);
+    }
+
+    .review-modal-box .check-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--brass);
+    }
+
+    .review-modal-box h3 {
+        font-family: 'Fraunces', serif;
+        font-size: 1.4rem;
+        font-weight: 500;
+        font-style: italic;
+        margin-bottom: 0.8rem;
+        color: var(--wine);
+    }
+
+    .review-modal-box p {
+        color: var(--ink-soft);
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .review-modal-close {
+        width: 100%;
+        padding: 0.9rem;
+        background: var(--surface);
+        color: var(--on-dark);
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .confirmation-channels {
+        text-align: left;
+        margin-bottom: 1.5rem;
+    }
+
+    .confirmation-channel {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        padding: 8px 0;
+    }
+
+    .confirmation-channel svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--brass);
+        fill: none;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .confirmation-channel strong {
+        color: var(--ink);
+        display: block;
+        font-size: 0.85rem;
+    }
+
+    .confirmation-pending-tag {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--brass);
+        border: 1px solid var(--ring);
+        padding: 1px 7px;
+        border-radius: 10px;
+        margin-left: 6px;
+    }
+
+    @media (max-width: 600px) {
+        .review-form-wrap { padding: 2rem 1.5rem; }
+        .star-picker svg { width: 28px; height: 28px; }
+    }
+</style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode" aria-label="Toggle dark mode">☾</button>
+
+    <div class="page-header">
+        <a href="salon.html" class="logo">Luxe<span>SALON</span></a>
+        <h1>How was your <em>visit?</em></h1>
+        <p>Your feedback helps other clients find us, and helps us do better. It only takes a minute.</p>
+    </div>
+
+    <div class="review-form-wrap">
+        <form id="reviewForm" novalidate>
+            <label for="reviewerName">Your Name</label>
+            <input type="text" id="reviewerName" placeholder="Jane Doe" required>
+
+            <label for="reviewService">Service You Received</label>
+            <select id="reviewService" required>
+                <option value="">Select a service...</option>
+                <option value="Hair Cutting">Hair Cutting</option>
+                <option value="Hair Coloring">Hair Coloring</option>
+                <option value="Hair Spa & Treatment">Hair Spa & Treatment</option>
+                <option value="Bridal Services">Bridal Services</option>
+                <option value="Nail Services">Nail Services</option>
+                <option value="Makeup & Styling">Makeup & Styling</option>
+                <option value="Bridal Makeup">Bridal Makeup</option>
+                <option value="Party Makeup">Party Makeup</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label>Your Rating</label>
+            <div class="star-picker" id="starPicker" role="radiogroup" aria-label="Star rating">
+                <button type="button" data-star="1" aria-label="1 star" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9L22 9.6l-5.5 4.8L18 22l-6-3.8L6 22l1.5-7.6L2 9.6l7.1-.7z"/></svg></button>
+                <button type="button" data-star="2" aria-label="2 stars" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9L22 9.6l-5.5 4.8L18 22l-6-3.8L6 22l1.5-7.6L2 9.6l7.1-.7z"/></svg></button>
+                <button type="button" data-star="3" aria-label="3 stars" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9L22 9.6l-5.5 4.8L18 22l-6-3.8L6 22l1.5-7.6L2 9.6l7.1-.7z"/></svg></button>
+                <button type="button" data-star="4" aria-label="4 stars" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9L22 9.6l-5.5 4.8L18 22l-6-3.8L6 22l1.5-7.6L2 9.6l7.1-.7z"/></svg></button>
+                <button type="button" data-star="5" aria-label="5 stars" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9L22 9.6l-5.5 4.8L18 22l-6-3.8L6 22l1.5-7.6L2 9.6l7.1-.7z"/></svg></button>
+            </div>
+            <p class="star-label" id="starLabel"></p>
+
+            <label for="reviewText">Tell Us About Your Experience</label>
+            <textarea id="reviewText" placeholder="What did you love? Anything we could improve?" required></textarea>
+
+            <button type="submit" class="submit-btn">Submit Review</button>
+            <p class="form-note">Reviews are saved on this device for now and may be featured on our Testimonials section.</p>
+        </form>
+        <a href="salon.html" class="back-link">← Back to Luxe Salon</a>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="review-modal" id="reviewModal">
+        <div class="review-modal-box">
+            <div class="check-icon">✦</div>
+            <h3>Thank You!</h3>
+            <p>We really appreciate you taking the time to share your experience.</p>
+
+            <div class="confirmation-channels">
+                <div class="confirmation-channel">
+                    <svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+                    <div>
+                        <strong>Owner notification <span class="confirmation-pending-tag">Pending Setup</span></strong>
+                        The salon owner will be alerted the moment this is connected to our system.
+                    </div>
+                </div>
+                <div class="confirmation-channel">
+                    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    <div>
+                        <strong>Review moderation <span class="confirmation-pending-tag">Pending Setup</span></strong>
+                        Reviews will be checked before appearing publicly on our Testimonials section.
+                    </div>
+                </div>
+                <div class="confirmation-channel">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    <div>
+                        <strong>For now</strong>
+                        Your review is saved on this device only and isn't visible to anyone else yet.
+                    </div>
+                </div>
+            </div>
+            <button class="review-modal-close" onclick="closeReviewModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Dark Theme (shared with salon.html via localStorage)
+        function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.textContent = '☀';
+            }
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                if (document.body.classList.contains('dark-theme')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.textContent = '☀';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.textContent = '☾';
+                }
+            });
+        }
+        initTheme();
+
+        // Star rating picker
+        let selectedRating = 0;
+        const starLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+        const stars = document.querySelectorAll('#starPicker button');
+        const starLabelEl = document.getElementById('starLabel');
+
+        function renderStars(rating) {
+            stars.forEach(btn => {
+                const val = parseInt(btn.getAttribute('data-star'));
+                const svg = btn.querySelector('svg');
+                svg.classList.toggle('filled', val <= rating);
+                btn.setAttribute('aria-pressed', val === rating ? 'true' : 'false');
+            });
+            starLabelEl.textContent = rating ? `${rating} / 5 — ${starLabels[rating]}` : '';
+        }
+
+        stars.forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectedRating = parseInt(this.getAttribute('data-star'));
+                renderStars(selectedRating);
+            });
+            btn.addEventListener('mouseenter', function() {
+                renderStars(parseInt(this.getAttribute('data-star')));
+            });
+        });
+
+        document.getElementById('starPicker').addEventListener('mouseleave', function() {
+            renderStars(selectedRating);
+        });
+
+        // Submit handler — stores locally (no backend yet)
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('reviewerName').value.trim();
+            const service = document.getElementById('reviewService').value;
+            const text = document.getElementById('reviewText').value.trim();
+
+            if (!name || !service || !text) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            if (selectedRating === 0) {
+                alert('Please select a star rating.');
+                return;
+            }
+
+            const REVIEWS_KEY = 'luxeSalonReviews';
+            let reviews = [];
+            try {
+                reviews = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || [];
+            } catch { reviews = []; }
+
+            reviews.push({
+                name, service, text,
+                rating: selectedRating,
+                date: new Date().toISOString(),
+                status: 'pending'
+            });
+            localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+
+            // TEMP: review is only saved to this browser's localStorage for now.
+            // Once a real backend exists, this is the point where the review
+            // gets POSTed to the server (saved to the reviews table), the owner
+            // gets notified (email/SMS/WhatsApp), and it enters a moderation
+            // queue before appearing on the public Testimonials section.
+
+            document.getElementById('reviewModal').classList.add('open');
+            this.reset();
+            selectedRating = 0;
+            renderStars(0);
+        });
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.remove('open');
+        }
+
+        document.getElementById('reviewModal').addEventListener('click', function(e) {
+            if (e.target === this) closeReviewModal();
+        });
+    </script>
+</body>
+</html>

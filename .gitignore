@@ -1,0 +1,3 @@
+# Never commit real database credentials or the one-time admin creation script
+backend/config.php
+backend/create_admin.php
